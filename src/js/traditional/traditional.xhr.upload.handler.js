@@ -82,7 +82,7 @@ qq.traditional.XhrUploadHandler = function(spec, proxy) {
 
         isErrorUploadResponse = function(xhr, response) {
             return qq.indexOf([200, 201, 202, 203, 204], xhr.status) < 0 ||
-                (spec.requireSuccessJson && !response.success) ||
+                (spec.requireSuccessJson && !(response.errorCode==0)) ||
                 response.reset;
         },
 

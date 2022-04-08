@@ -161,6 +161,10 @@ qq.UploadData = function(uploaderProxy) {
 
             uploaderProxy.onStatusChange(id, oldStatus, newStatus);
         },
+ 
+        getStatus:function(id){
+            return data[id].status;
+        },
 
         uuidChanged: function(id, newUuid) {
             var oldUuid = data[id].uuid;
@@ -212,6 +216,7 @@ qq.status = {
     UPLOAD_RETRYING: "retrying upload",
     UPLOAD_SUCCESSFUL: "upload successful",
     UPLOAD_FAILED: "upload failed",
+    UPLOAD_EXISNAME:"upload exisname",
     DELETE_FAILED: "delete failed",
     DELETING: "deleting",
     DELETED: "deleted"

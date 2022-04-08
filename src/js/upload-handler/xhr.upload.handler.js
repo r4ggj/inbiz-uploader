@@ -175,6 +175,9 @@ qq.XhrUploadHandler = function(spec) {
 
             if (inProgress) {
                 log(qq.format("Moving these chunks from in-progress {}, to remaining.", JSON.stringify(inProgress)));
+                if(inProgress.length>1){
+                    inProgress.shift();
+                }
                 inProgress.reverse();
                 qq.each(inProgress, function(idx, chunkIdx) {
                     remaining.unshift(chunkIdx);
@@ -187,7 +190,7 @@ qq.XhrUploadHandler = function(spec) {
             if (handler.isValid(id)) {
                 log(qq.format("Aborting XHR upload for {} '{}' due to pause instruction.", id, getName(id)));
                 handler._getFileState(id).paused = true;
-                abort(id);
+              //  abort(id);
                 return true;
             }
         },

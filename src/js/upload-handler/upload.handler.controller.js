@@ -190,7 +190,9 @@ qq.UploadHandlerController = function(o, namespace) {
                 chunkData = handler._getChunkData(id, chunkIdx);
                 resuming = false;
             }
-
+            if(fileState.paused && inProgressChunks && inProgressChunks.length > 0){
+                inProgressChunks=[];
+            }
             // If all chunks have already uploaded successfully, we must be re-attempting the finalize step.
             if (chunkIdx == null && inProgressChunks.length === 0) {
                 chunked.finalize(id);

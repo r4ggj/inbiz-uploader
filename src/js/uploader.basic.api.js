@@ -448,6 +448,9 @@
                 case qq.status.DELETE_FAILED:
                     this._onDeleteComplete(id, null, true);
                     break;
+                case qq.status.UPLOAD_EXISNAME:
+                    this._uploadData.setStatus(id,newStatus);
+                    break;
                 default:
                     var errorMessage = "Method setStatus called on '" + name + "' not implemented yet for " + newStatus;
                     this.log(errorMessage);
@@ -1578,16 +1581,18 @@
 
         _onSubmitCallbackSuccess: function(id, name) {
             this._onSubmit.apply(this, arguments);
-            this._uploadData.setStatus(id, qq.status.SUBMITTED);
-            this._onSubmitted.apply(this, arguments);
-
+            var notExistName =!(this._uploadData.getStatus(id) == qq.status.UPLOAD_EXISNAME);
+            if(notExistName){
+                this._uploadData.setStatus(id, qq.status.SUBMITTED);
+                this._onSubmitted.apply(this, arguments);
+            }
             if (this._options.autoUpload) {
-                this._options.callbacks.onSubmitted.apply(this, arguments);
+                (notExistName) && this._options.callbacks.onSubmitted.apply(this, arguments);
                 this._uploadFile(id);
             }
             else {
                 this._storeForLater(id);
-                this._options.callbacks.onSubmitted.apply(this, arguments);
+                (notExistName) && this._options.callbacks.onSubmitted.apply(this, arguments);
             }
         },
 

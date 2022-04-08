@@ -1,6 +1,6 @@
 {
   "name": "inbiz-uploader",
-  "version": "5.16.5",
+  "version": "5.16.6",
   "description": "this is uploader",
   "types": "typescript/inbiz-uploader.d.ts",
   "main": "lib/traditional.js",
@@ -9,7 +9,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack"
+    "build": "gulp"
   },
   "repository": {
     "type": "git",

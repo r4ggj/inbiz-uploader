@@ -122,7 +122,44 @@ qq.XhrUploadHandler = function(spec) {
         getFile: function(id) {
             return handler.isValid(id) && handler._getFileState(id).file;
         },
+        
+        progreSpeed:function(file,loaded,total){
+            /*计算间隔*/
+            file.lastTime = file.lastTime || 0;
+            file.lastSize = file.lastSize || 0;
+            var nowTime = new Date().getTime();
+            var intervalTime = (nowTime - file.lastTime)/1000;
+            var intervalSize =loaded - file.lastSize;
 
+            /*重新赋值以便于下次计算*/
+            file.lastTime = nowTime;
+            file.lastSize = loaded;
+
+            /*计算速度*/
+            var speed = intervalSize/intervalTime;
+            var bSpeed = speed;//保存以b/s为单位的速度值，方便计算剩余时间
+            var units = 'b/s';//单位名称
+            if(speed/1024>1){
+                speed = speed/1024;
+                units = 'kb/s';
+            }
+            if(speed/1024>1){
+                speed = speed/1024;
+                units = 'M/s';
+            }
+
+            /*计算剩余时间*/
+            var leftTime = ((total - loaded) / bSpeed);
+
+            /*计算进度*/
+            var progress = loaded/total * 100;
+
+            return {
+                progress:progress.toFixed(1),
+                leftTime:leftTime.toFixed(1),
+                speed:speed.toFixed(1)+units
+            }
+       },
         getProxy: function(id) {
             return handler.isValid(id) && handler._getFileState(id).proxy;
         },

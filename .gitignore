@@ -34,7 +34,6 @@ test/temp*
 test/_temp*
 test/_vendor*
 node_modules/
-dist/
 bin/
 
 

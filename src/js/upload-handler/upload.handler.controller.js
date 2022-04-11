@@ -182,7 +182,9 @@ qq.UploadHandlerController = function(o, namespace) {
             if (fileState.loaded == null) {
                 fileState.loaded = 0;
             }
-
+            //处理速率
+            let file =  handler.getFile(id);
+            file.progre = handler.progreSpeed(file,fileState.loaded,size);
             // Don't follow-through with the resume attempt if the integrator returns false from onResume
             if (resuming && options.onResume(id, name, chunkData, fileState.customResumeData) === false) {
                 chunked.reset(id);

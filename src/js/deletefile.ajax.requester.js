@@ -50,10 +50,11 @@ qq.DeleteFileAjaxRequester = function(o) {
 
     qq.extend(this, {
         sendDelete: function(id, uuid, additionalMandatedParams) {
-            var additionalOptions = additionalMandatedParams || {};
-
+            /*var additionalOptions = additionalMandatedParams || {};*/
             options.log("Submitting delete file request for " + id);
-
+            options.onDelete(id);
+            options.onDeleteComplete(id);
+            /* 注释自动调用删除接口
             if (options.method === "DELETE") {
                 requester.initTransport(id)
                     .withPath(uuid)
@@ -65,7 +66,7 @@ qq.DeleteFileAjaxRequester = function(o) {
                 requester.initTransport(id)
                     .withParams(additionalOptions)
                     .send();
-            }
+            }*/
         }
     });
 };

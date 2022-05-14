@@ -265,7 +265,11 @@ qq.traditional.XhrUploadHandler = function(spec, proxy) {
         uploadFile: function(id) {
             var fileOrBlob = handler.getFile(id),
                 promise, xhr, customParams, toSend;
-
+            if(fileOrBlob.size === 0){
+                promise = new qq.Promise();
+                promise.success({success:0}, null);
+                return promise;
+            }
             xhr = handler._createXhr(id);
             handler._registerProgressHandler(id);
             promise = createReadyStateChangedHandler(id, xhr);

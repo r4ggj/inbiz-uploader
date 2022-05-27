@@ -333,6 +333,8 @@ qq.UploadHandlerController = function(o, namespace) {
                     connectionManager._open.push(nextId);
                     upload.start(nextId);
                 }
+            }else if(dontAllowNext &&  connectionsIndex >= 0){
+                connectionManager._open.splice(connectionsIndex, 1);
             }
         },
 
@@ -798,9 +800,13 @@ qq.UploadHandlerController = function(o, namespace) {
          * @param id ID of the upload/file to pause
          * @returns {boolean} true if the upload was paused
          */
-        pause: function(id) {
+        pause: function(id,dontAllowNext) {
             if (controller.isResumable(id) && handler.pause && controller.isValid(id) && handler.pause(id)) {
-                connectionManager.free(id);
+                if(dontAllowNext){
+                    connectionManager.free(id,true);
+                }else{
+                    connectionManager.free(id);
+                }
                 handler.moveInProgressToRemaining(id);
                 return true;
             }

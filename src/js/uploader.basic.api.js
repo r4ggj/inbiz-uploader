@@ -306,7 +306,7 @@
             }
         },
 
-        pauseUpload: function(id) {
+        pauseUpload: function(id,dontAllowNext) {
             var uploadData = this._uploadData.retrieve({id: id});
 
             if (!qq.supportedFeatures.pause || !this._options.chunking.enabled) {
@@ -314,8 +314,8 @@
             }
 
             // Pause only really makes sense if the file is uploading or retrying
-            if (qq.indexOf([qq.status.UPLOADING, qq.status.UPLOAD_RETRYING], uploadData.status) >= 0) {
-                if (this._handler.pause(id)) {
+            if (qq.indexOf([qq.status.UPLOADING, qq.status.UPLOAD_RETRYING,qq.status.QUEUED], uploadData.status) >= 0) {
+                if (this._handler.pause(id,dontAllowNext)) {
                     this._uploadData.setStatus(id, qq.status.PAUSED);
                     return true;
                 }

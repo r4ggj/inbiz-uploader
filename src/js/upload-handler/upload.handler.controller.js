@@ -369,7 +369,12 @@ qq.UploadHandlerController = function(o, namespace) {
 
         open: function(id, chunkIdx) {
             if (chunkIdx == null) {
-                connectionManager._waiting.push(id);
+                var file = handler.getFile(id);
+                if(file &&  file.status == qq.status.PAUSED){
+                    connectionManager._waiting.unshift(id);
+                }else{
+                    connectionManager._waiting.push(id);
+                }
             }
 
             if (connectionManager.available()) {

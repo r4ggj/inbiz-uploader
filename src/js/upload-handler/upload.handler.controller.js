@@ -610,10 +610,13 @@ qq.UploadHandlerController = function(o, namespace) {
 
             options.onUpload(id, name).then(
                 function(response) {
+                    var file = handler._getFileState(id);
+                    var status  = options.getStatus(id);
                     if (response && response.pause) {
                         options.setStatus(id, qq.status.PAUSED);
                         handler.pause(id);
                         connectionManager.free(id);
+                    }else if(response && status == qq.status.PAUSED && !file.chunking){
                     }
                     else {
                         if (chunkingPossible && handler._shouldChunkThisFile(id)) {

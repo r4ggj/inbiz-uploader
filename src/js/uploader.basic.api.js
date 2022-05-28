@@ -859,6 +859,9 @@
                     getCustomResumeData: qq.bind(self._getCustomResumeData, self),
                     setStatus: function(id, status) {
                         self._uploadData.setStatus(id, status);
+                    },
+                    getStatus:function(id) {
+                        return self._uploadData.getStatus(id);
                     }
                 };
 

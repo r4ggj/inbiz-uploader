@@ -96,7 +96,11 @@ qq.XhrUploadHandler = function(spec) {
         },
 
         clearXhr: function(id, chunkIdx) {
-            var tempState = handler._getFileState(id).temp;
+            var file = handler._getFileState(id);
+            if(!file){
+                return;
+            }
+            var tempState = file.temp;
 
             if (tempState.xhrs) {
                 delete tempState.xhrs[chunkIdx];
@@ -508,21 +512,22 @@ qq.XhrUploadHandler = function(spec) {
                     },
 
                     chunked: function(loaded, total) {
-                        var chunkProgress = handler._getFileState(id).temp.chunkProgress,
-                            totalSuccessfullyLoadedForFile = handler._getFileState(id).loaded,
+                        var file = handler._getFileState(id);
+                        if(file){
+                            var chunkProgress = file.temp.chunkProgress,
+                            totalSuccessfullyLoadedForFile = file.loaded,
                             loadedForRequest = loaded,
                             totalForRequest = total,
                             totalFileSize = getSize(id),
                             estActualChunkLoaded = loadedForRequest - (totalForRequest - chunkSize),
                             totalLoadedForFile = totalSuccessfullyLoadedForFile;
+                            chunkProgress[chunkIdx] = estActualChunkLoaded;
 
-                        chunkProgress[chunkIdx] = estActualChunkLoaded;
-
-                        qq.each(chunkProgress, function(chunkIdx, chunkLoaded) {
-                            totalLoadedForFile += chunkLoaded;
-                        });
-
-                        onProgress(id, name, totalLoadedForFile, totalFileSize);
+                            qq.each(chunkProgress, function(chunkIdx, chunkLoaded) {
+                                totalLoadedForFile += chunkLoaded;
+                            });
+                            onProgress(id, name, totalLoadedForFile, totalFileSize);
+                        }
                     }
                 };
 

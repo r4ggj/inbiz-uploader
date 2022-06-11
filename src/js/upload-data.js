@@ -147,6 +147,9 @@ qq.UploadData = function(uploaderProxy) {
         },
 
         setStatus: function(id, newStatus) {
+            if(!data[id]){
+                return;
+            }
             var oldStatus = data[id].status,
                 byStatusOldStatusIndex = qq.indexOf(byStatus[oldStatus], id);
 

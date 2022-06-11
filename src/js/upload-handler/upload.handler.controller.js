@@ -239,10 +239,13 @@ qq.UploadHandlerController = function(o, namespace) {
                                 // upload chunk success
                                 function success(response, xhr) {
                                     log("Chunked upload request succeeded for " + id + ", chunk " + chunkIdx);
-
+                                    var file =handler._getFileState(id);
+                                    if(!file){
+                                       return
+                                    }
                                     handler.clearCachedChunk(id, chunkIdx);
 
-                                    var inProgressChunks = handler._getFileState(id).chunking.inProgress || [],
+                                    var inProgressChunks =file.chunking.inProgress || [],
                                         responseToReport = upload.normalizeResponse(response, true),
                                         inProgressChunkIdx = qq.indexOf(inProgressChunks, chunkIdx);
 
@@ -613,9 +616,13 @@ qq.UploadHandlerController = function(o, namespace) {
                     var file = handler._getFileState(id);
                     var status  = options.getStatus(id);
                     if (response && response.pause) {
-                        options.setStatus(id, qq.status.PAUSED);
                         handler.pause(id);
                         connectionManager.free(id);
+                        if(response.exist){
+                            options.setStatus(id, qq.status.UPLOAD_EXISNAME);
+                        }else{
+                            options.setStatus(id, qq.status.PAUSED);
+                        }
                     }else if(response && status == qq.status.PAUSED && !file.chunking){
                     }
                     else {
